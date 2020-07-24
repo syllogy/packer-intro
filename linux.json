@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+    "aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+    "aws_region": "us-east-1",
+    "ami_description": "Packer - Ubuntu-OpenJDK"
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "name": "ubuntu-openjdk8",
+      "access_key": "{{user `aws_access_key`}}",
+      "secret_key": "{{user `aws_secret_key`}}",
+      "region": "{{user `aws_region`}}",
+      "source_ami": "ami-079f96ce4a4a7e1c7",
+      "instance_type": "t2.micro",
+      "ssh_username": "ubuntu",
+      "ami_name": "ubuntu-openjdk8-{{timestamp}}",
+      "ami_description": "{{user `ami_description`}}"
+    }
+  ],
+  "provisioners":[
+    {
+      "type": "shell",
+      "inline": ["sleep 30"]
+    },
+    {
+      "type": "shell",
+      "inline": ["sudo apt-get update && sudo apt-get install openjdk-8-jdk -y"]
+    }
+  ]
+}
